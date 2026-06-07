@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ボドゲさがし</title>
+    <!-- アイコンフォント FontAwesome の読み込み -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* --- 1. 全体共通のデザイン --- */
+        :root {
+            --primary-color: #8d6e63; /* 温かみのあるブラウン */
+            --bg-color: #fffaf0;      /* オフホワイト */
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --text-sub: #666666;
+            --border-color: #e0d4c3;
+
+            /* 4つのボタンの背景テーマカラー（人数を上品なチェリーブロッサムへ） */
+            --mood-color: #e8f5e9;    /* 気分：淡いグリーン */
+            --players-color: #ffe5ec; /* 人数：華やかなチェリーブロッサム（桜色） */
+            --time-color: #e8eaf6;    /* 時間：淡いブルー/パープル */
+            --name-color: #e0f7fa;    /* 名前：淡いシアン/ライトブルー */
+            
+            /* アイコンの色を文字色（濃いブラウン）に統一 */
+            --icon-unified-color: #5d4037;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+        }
+
+        /* ヘッダーナビゲーション */
+        header {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo-link {
+            text-decoration: none;
+            color: var(--text-color);
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        /* ナビゲーションをヘッダーの中央上部に配置 */
+        nav {
+            display: flex;
+            gap: 40px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            font-size: 16px;
+            transition: color 0.2s;
+        }
+
+        nav a:hover {
+            color: var(--primary-color);
+        }
+
+        /* 左右のバランスを保つためのダミー要素 */
+        .header-spacer {
+            width: 150px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        /* ページの表示切り替え用クラス */
+        .page {
+            display: none;
+        }
+        .page.active {
+            display: block;
+        }
+
+        .breadcrumb {
+            font-size: 14px;
+            color: var(--text-sub);
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 32px;
+            color: #5d4037;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .section-desc {
+            text-align: center;
+            font-size: 16px;
+            color: var(--text-sub);
+            margin-bottom: 50px;
+        }
+
+        /* --- 2. ①ホーム画面用のスタイル --- */
+        .search-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 25px;
+        }
+
+        .search-button {
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+        }
+
+        .search-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(141, 110, 99, 0.12);
+        }
+
+        /* 各ボタンの背景色 */
+        .search-button.mood { background-color: var(--mood-color); }
+        .search-button.players { background-color: var(--players-color); }
+        .search-button.time { background-color: var(--time-color); }
+        .search-button.name { background-color: var(--name-color); }
+
+        /* 全てのアイコンの色を文字色（濃いブラウン）に固定 */
+        .search-button i {
+            font-size: 45px;
+            margin-bottom: 20px;
+            color: var(--icon-unified-color);
+        }
+
+        .search-button h3 {
+            margin: 0 0 12px 0;
+            font-size: 20px;
+            color: #5d4037;
+        }
+
+        .search-button p {
+            margin: 0;
+            font-size: 14px;
+            color: var(--text-sub);
+            line-height: 1.4;
+        }
+
+        /* --- 3. 選択用ページのスタイル（共通・個別） --- */
+        .choice-grid { display: grid; gap: 20px; }
+        .choice-grid.mood-style { grid-template-columns: repeat(2, 1fr); max-width: 800px; margin: 0 auto; }
+        
+        .choice-grid.triple-style {
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .choice-item {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 25px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .choice-item:hover { border-color: var(--primary-color); background-color: #fffdf9; transform: translateY(-2px); }
+        .choice-item .icon-box { width: 50px; height: 50px; background-color: #fbe9e7; color: #d84315; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+
+        .choice-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 40px 20px; text-align: center; cursor: pointer; transition: all 0.2s; }
+        .choice-card:hover { border-color: var(--primary-color); background-color: #fffdf9; transform: translateY(-2px); }
+        .choice-card i { font-size: 35px; color: var(--primary-color); margin-bottom: 15px; }
+        .choice-title { font-size: 18px; font-weight: bold; }
+        .choice-desc { font-size: 13px; color: var(--text-sub); margin-top: 5px; }
+
+        .search-bar-container { max-width: 600px; margin: 0 auto; text-align: center; }
+        .search-input-wrapper { position: relative; display: flex; align-items: center; }
+        .search-input-wrapper input { width: 100%; padding: 18px 25px; font-size: 16px; border: 1px solid var(--border-color); border-radius: 30px; outline: none; }
+        .search-input-wrapper i { position: absolute; right: 25px; color: var(--text-sub); font-size: 18px; cursor: pointer; }
+        .search-hint { margin-top: 40px; text-align: left; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px 30px; }
+        .search-hint h4 { margin: 0 0 10px 0; color: #5d4037; }
+        .search-hint p { margin: 0; font-size: 14px; color: var(--text-sub); line-height: 1.6; }
+
+        /* --- 4. 保存したボドゲ（空状態）用のスタイル --- */
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .empty-state i {
+            font-size: 60px;
+            color: #ccc;
+            margin-bottom: 20px;
+        }
+        .empty-state h3 { margin: 0 0 10px 0; color: #5d4037; }
+        .empty-state p { color: var(--text-sub); margin-bottom: 30px; font-size: 14px; }
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+        .btn-primary:hover { background-color: #5d4037; }
+
+        /* --- 5. 使い方ページ用のスタイル --- */
+        .guide-container {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+        .guide-step {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 30px;
+            display: flex;
+            gap: 25px;
+            align-items: flex-start;
+        }
+        .step-num {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: bold;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 18px;
+        }
+        .guide-content h3 { margin: 0 0 10px 0; color: #5d4037; font-size: 20px; }
+        .guide-content p { margin: 0; color: var(--text-sub); font-size: 15px; line-height: 1.6; }
+    </style>
+</head>
+<body>
+
+    <!-- 共通ヘッダー -->
+    <header>
+        <a href="#" class="logo-link" onclick="showPage('home')">
+            <div class="logo">
+                <i class="fa-solid fa-dice"></i> ボドゲさがし
+            </div>
+        </a>
+
+        <nav>
+            <a href="#" onclick="showPage('page-favorites')">保存したボドゲ</a>
+            <a href="#" onclick="showPage('page-guide')">使い方</a>
+        </nav>
+
+        <div class="header-spacer"></div>
+    </header>
+
+    <div class="container">
+        
+        <!-- ================= ① ホーム（トップページ） ================= -->
+        <div id="home" class="page active">
+            <div class="section-title" style="font-size: 38px; margin-top: 20px;">自分にピッタリのボードゲームを見つけよう</div>
+            <div class="section-desc">いろんな探し方で、あなたに合うゲームがきっと見つかる！</div>
+
+            <div class="search-grid">
+                <div class="search-button mood" onclick="showPage('page-mood')">
+                    <i class="fa-regular fa-face-smile"></i>
+                    <h3>気分から探す</h3>
+                    <p>遊びたい気分に<br>ぴったりなゲームを探す</p>
+                </div>
+                <!-- 上品なチェリーブロッサムにアップデートされたボタン -->
+                <div class="search-button players" onclick="showPage('page-players')">
+                    <i class="fa-solid fa-users"></i>
+                    <h3>人数から探す</h3>
+                    <p>遊ぶ人数に合わせて<br>ゲームを探す</p>
+                </div>
+                <div class="search-button time" onclick="showPage('page-time')">
+                    <i class="fa-regular fa-clock"></i>
+                    <h3>時間から探す</h3>
+                    <p>プレイ時間に合わせて<br>ゲームを探す</p>
+                </div>
+                <div class="search-button name" onclick="showPage('page-name')">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <h3>名前から探す</h3>
+                    <p>遊びたいゲームの名前を<br>入力して探す</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= ② 気分からさがすページ ================= -->
+        <div id="page-mood" class="page">
+            <div class="breadcrumb">ホーム ＞ 気分から探す</div>
+            <div class="section-title">今日はどんな気分？</div>
+            <div class="section-desc">遊びたい気分に合ったボードゲームを探そう！</div>
+
+            <div class="choice-grid mood-style">
+                <div class="choice-item" onclick="triggerSearch('わいわいしたい')">
+                    <div class="icon-box" style="background:#fbe9e7; color:#ff5722;"><i class="fa-solid fa-comments"></i></div>
+                    <div><div class="choice-title">わいわいしたい</div><div class="choice-desc">みんなで盛り上がりたい！</div></div>
+                </div>
+                <div class="choice-item" onclick="triggerSearch('頭を使いたい')">
+                    <div class="icon-box" style="background:#e8f5e9; color:#4caf50;"><i class="fa-solid fa-brain"></i></div>
+                    <div><div class="choice-title">頭を使いたい</div><div class="choice-desc">じっくり考えるゲーム！</div></div>
+                </div>
+                <div class="choice-item" onclick="triggerSearch('協力したい')">
+                    <div class="icon-box" style="background:#e3f2fd; color:#2196f3;"><i class="fa-solid fa-handshake"></i></div>
+                    <div><div class="choice-title">協力したい</div><div class="choice-desc">協力して目標を達成したい！</div></div>
+                </div>
+                <div class="choice-item" onclick="triggerSearch('駆け引きを楽しみたい')">
+                    <div class="icon-box" style="background:#fff3e0; color:#ff9800;"><i class="fa-solid fa-scale-balanced"></i></div>
+                    <div><div class="choice-title">駆け引きを楽しみたい</div><div class="choice-desc">読み合い・心理戦が好き！</div></div>
+                </div>
+                <div class="choice-item" onclick="triggerSearch('初心者向け')">
+                    <div class="icon-box" style="background:#f3e5f5; color:#9c27b0;"><i class="fa-solid fa-seedling"></i></div>
+                    <div><div class="choice-title">初心者向け</div><div class="choice-desc">はじめてでも安心！</div></div>
+                </div>
+                <div class="choice-item" onclick="triggerSearch('運要素を楽しみたい')">
+                    <div class="icon-box" style="background:#fffde7; color:#fbc02d;"><i class="fa-solid fa-dice"></i></div>
+                    <div><div class="choice-title">運要素を楽しみたい</div><div class="choice-desc">運がカギになるゲーム！</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= ③ 人数からさがすページ ================= -->
+        <div id="page-players" class="page">
+            <div class="breadcrumb">ホーム ＞ 人数から探す</div>
+            <div class="section-title">何人で遊ぶ？</div>
+            <div class="section-desc">一緒に遊ぶ人数を選んでね！</div>
+
+            <div class="choice-grid triple-style">
+                <div class="choice-card" onclick="triggerSearch('1人')"><i class="fa-solid fa-user"></i><div class="choice-title">1人</div></div>
+                <div class="choice-card" onclick="triggerSearch('2人')"><i class="fa-solid fa-user-group"></i><div class="choice-title">2人</div></div>
+                <div class="choice-card" onclick="triggerSearch('3人')"><i class="fa-solid fa-users"></i><div class="choice-title">3人</div></div>
+                <div class="choice-card" onclick="triggerSearch('4人')"><i class="fa-solid fa-users"></i><div class="choice-title">4人</div></div>
+                <div class="choice-card" onclick="triggerSearch('5人')"><i class="fa-solid fa-users"></i><div class="choice-title">5人</div></div>
+                <div class="choice-card" onclick="triggerSearch('6人')"><i class="fa-solid fa-users"></i><div class="choice-title">6人</div></div>
+            </div>
+            <div class="choice-card" style="max-width:900px; margin:20px auto 0; padding:20px;" onclick="triggerSearch('7人以上')">
+                <div class="choice-title"><i class="fa-solid fa-users-rectangle" style="margin:0 10px 0 0; font-size:20px; vertical-align:middle;"></i>7人以上</div>
+            </div>
+        </div>
+
+        <!-- ================= ④ 時間からさがすページ ================= -->
+        <div id="page-time" class="page">
+            <div class="breadcrumb">ホーム ＞ 時間から探す</div>
+            <div class="section-title">どれくらい遊びたい？</div>
+            <div class="section-desc">プレイ時間の目安を選んでね！</div>
+
+            <div class="choice-grid triple-style">
+                <div class="choice-card" onclick="triggerSearch('15分以内')"><i class="fa-solid fa-circle-pie" style="color:#81c784;"></i><div class="choice-title">15分以内</div></div>
+                <div class="choice-card" onclick="triggerSearch('30分以内')"><i class="fa-solid fa-circle-pie" style="color:#ffb74d;"></i><div class="choice-title">30分以内</div></div>
+                <div class="choice-card" onclick="triggerSearch('60分以内')"><i class="fa-solid fa-circle-pie" style="color:#e57373;"></i><div class="choice-title">60分以内</div></div>
+                <div class="choice-card" onclick="triggerSearch('90分以内')"><i class="fa-solid fa-circle-pie" style="color:#ba68c8;"></i><div class="choice-title">90分以内</div></div>
+                <div class="choice-card" onclick="triggerSearch('120分以内')"><i class="fa-solid fa-circle-pie" style="color:#4db6ac;"></i><div class="choice-title">120分以内</div></div>
+                <div class="choice-card" onclick="triggerSearch('120分以上')"><i class="fa-solid fa-circle-pie" style="color:#90a4ae;"></i><div class="choice-title">120分以上</div></div>
+            </div>
+        </div>
+
+        <!-- ================= ⑤ 名前からさがすページ ================= -->
+        <div id="page-name" class="page">
+            <div class="breadcrumb">ホーム ＞ 名前から探す</div>
+            <div class="section-title">ゲーム名を入力して検索</div>
+            <div class="section-desc">遊びたいゲームの名前を入力してね！</div>
+
+            <div class="search-bar-container">
+                <div class="search-input-wrapper">
+                    <input type="text" placeholder="例）カタン" id="nameInput">
+                    <i class="fa-solid fa-magnifying-glass" onclick="triggerSearch(document.getElementById('nameInput').value || '入力ワード')"></i>
+                </div>
+                <div class="search-hint">
+                    <h4>検索のコツ</h4>
+                    <p>ひらがな・カタカナ・漢字で入力できます。<br>一部だけの入力でも検索できます。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= ⑥ 保存したボドゲページ（空状態） ================= -->
+        <div id="page-favorites" class="page">
+            <div class="breadcrumb">ホーム ＞ 保存したボドゲ</div>
+            <div class="section-title">保存したボドゲ</div>
+            <div class="section-desc">お気に入りに保存したゲームをここで確認・管理できます。</div>
+
+            <div class="empty-state">
+                <i class="fa-regular fa-heart"></i>
+                <h3>保存されたボードゲームはありません</h3>
+                <p>気になったゲームの詳細ページや一覧ページでハートマークを押すと、ここにストックされていつでも見返せるようになります。</p>
+                <button class="btn-primary" onclick="showPage('home')">ボドゲを探しに行く</button>
+            </div>
+        </div>
+
+        <!-- ================= ⑦ 使い方ページ ================= -->
+        <div id="page-guide" class="page">
+            <div class="breadcrumb">ホーム ＞ 使い方</div>
+            <div class="section-title">サイトの使い方</div>
+            <div class="section-desc">「ボドゲさがし」では、あなたのシチュエーションに合わせた4つの直感的な探し方を提供しています。</div>
+
+            <div class="guide-container">
+                <div class="guide-step">
+                    <div class="step-num">1</div>
+                    <div class="guide-content">
+                        <h3>気分から探す</h3>
+                        <p>「今日はわいわい盛り上がりたい」「じっくり頭を使って深く遊びたい」「みんなで協力してクリアしたい」など、その日の参加者のテンションや感情の波長に合わせて最適なゲームを絞り込めます。</p>
+                    </div>
+                </div>
+
+                <div class="guide-step">
+                    <div class="step-num">2</div>
+                    <div class="guide-content">
+                        <h3>人数から探す</h3>
+                        <p>2人きりの真剣勝負から、3〜4人の定番集まり、5〜6人以上の大人数パーティーまで、実際にその場で遊ぶ「正確な人数」を指定して、全員が余すことなく楽しめるゲームだけを瞬時にリストアップします。</p>
+                    </div>
+                </div>
+
+                <div class="guide-step">
+                    <div class="step-num">3</div>
+                    <div class="guide-content">
+                        <h3>時間から探す</h3>
+                        <p>スキマ時間にサクッと遊べる「15分以内」の軽いゲーム、ちょっとした合間に最適な「30分以内 Upside」、核心に迫る「60分」のゲームまで、持っている時間枠に合わせて探せます。</p>
+                    </div>
+                </div>
+
+                <div class="guide-step">
+                    <div class="step-num">4</div>
+                    <div class="guide-content">
+                        <h3>名前から探す</h3>
+                        <p>「あの有名なカタンってどんなゲームだろう？」「友達が言っていたワードウルフを調べたい」など、特定の遊びたいゲームが決まっている場合は、名前の一部を打ち込むだけで部分一致による高速検索が可能です。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- --- JavaScript --- -->
+    <script>
+        function showPage(pageId) {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+            
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) {
+                targetPage.classList.add('active');
+                window.scrollTo(0, 0);
+            }
+        }
+
+        function triggerSearch(criterion) {
+            alert(`「${criterion}」が選択されました！\n条件に合う検索結果ページ一覧への遷移フローは、今後の実装ステップ（Assemble）で構築します。`);
+        }
+    </script>
+</body>
+</html>
