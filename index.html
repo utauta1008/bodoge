@@ -16,13 +16,12 @@
             --text-sub: #666666;
             --border-color: #e0d4c3;
 
-            /* 4つのボタンの背景テーマカラー（人数を上品なチェリーブロッサムへ） */
+            /* 4つのボタンの背景テーマカラー */
             --mood-color: #e8f5e9;    /* 気分：淡いグリーン */
             --players-color: #ffe5ec; /* 人数：華やかなチェリーブロッサム（桜色） */
             --time-color: #e8eaf6;    /* 時間：淡いブルー/パープル */
             --name-color: #e0f7fa;    /* 名前：淡いシアン/ライトブルー */
             
-            /* アイコンの色を文字色（濃いブラウン）に統一 */
             --icon-unified-color: #5d4037;
         }
 
@@ -34,165 +33,60 @@
             padding: 0;
         }
 
-        /* ヘッダーナビゲーション */
+        /* ヘッダーのレイアウト：右上に配置 */
         header {
             background-color: var(--card-bg);
             border-bottom: 1px solid var(--border-color);
             padding: 15px 40px;
             display: flex;
-            justify-content: space-between;
+            justify-content: space-between; /* ロゴとメニューを両端に離す */
             align-items: center;
             position: sticky;
             top: 0;
             z-index: 100;
         }
 
-        .logo-link {
-            text-decoration: none;
-            color: var(--text-color);
-        }
+        .logo-link { text-decoration: none; color: var(--text-color); }
+        .logo { font-size: 22px; font-weight: bold; display: flex; align-items: center; gap: 10px; cursor: pointer; }
 
-        .logo {
-            font-size: 22px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
+        /* ナビゲーションを右上に配置 */
+        nav { 
+            display: flex; 
+            gap: 30px; 
+            position: static; 
+            transform: none; 
         }
+        nav a { text-decoration: none; color: var(--text-color); font-weight: 500; font-size: 16px; transition: color 0.2s; }
+        nav a:hover { color: var(--primary-color); }
+        
+        .header-spacer { display: none; }
 
-        /* ナビゲーションをヘッダーの中央上部に配置 */
-        nav {
-            display: flex;
-            gap: 40px;
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 60px 20px; }
+        .page { display: none; }
+        .page.active { display: block; }
+        .breadcrumb { font-size: 14px; color: var(--text-sub); margin-bottom: 20px; }
+        .section-title { text-align: center; font-size: 32px; color: #5d4037; margin-bottom: 10px; font-weight: 700; }
+        .section-desc { text-align: center; font-size: 16px; color: var(--text-sub); margin-bottom: 50px; }
 
-        nav a {
-            text-decoration: none;
-            color: var(--text-color);
-            font-weight: 500;
-            font-size: 16px;
-            transition: color 0.2s;
-        }
-
-        nav a:hover {
-            color: var(--primary-color);
-        }
-
-        /* 左右のバランスを保つためのダミー要素 */
-        .header-spacer {
-            width: 150px;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 60px 20px;
-        }
-
-        /* ページの表示切り替え用クラス */
-        .page {
-            display: none;
-        }
-        .page.active {
-            display: block;
-        }
-
-        .breadcrumb {
-            font-size: 14px;
-            color: var(--text-sub);
-            margin-bottom: 20px;
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: 32px;
-            color: #5d4037;
-            margin-bottom: 10px;
-            font-weight: 700;
-        }
-
-        .section-desc {
-            text-align: center;
-            font-size: 16px;
-            color: var(--text-sub);
-            margin-bottom: 50px;
-        }
-
-        /* --- 2. ①ホーム画面用のスタイル --- */
-        .search-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 25px;
-        }
-
-        .search-button {
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 40px 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
-        }
-
-        .search-button:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(141, 110, 99, 0.12);
-        }
-
-        /* 各ボタンの背景色 */
+        /* --- 2. ホーム画面用のスタイル --- */
+        .search-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 25px; }
+        .search-button { border: 1px solid var(--border-color); border-radius: 16px; padding: 40px 20px; text-align: center; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s; }
+        .search-button:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(141, 110, 99, 0.12); }
         .search-button.mood { background-color: var(--mood-color); }
         .search-button.players { background-color: var(--players-color); }
         .search-button.time { background-color: var(--time-color); }
         .search-button.name { background-color: var(--name-color); }
+        .search-button i { font-size: 45px; margin-bottom: 20px; color: var(--icon-unified-color); }
+        .search-button h3 { margin: 0 0 12px 0; font-size: 20px; color: #5d4037; }
+        .search-button p { margin: 0; font-size: 14px; color: var(--text-sub); line-height: 1.4; }
 
-        /* 全てのアイコンの色を文字色（濃いブラウン）に固定 */
-        .search-button i {
-            font-size: 45px;
-            margin-bottom: 20px;
-            color: var(--icon-unified-color);
-        }
-
-        .search-button h3 {
-            margin: 0 0 12px 0;
-            font-size: 20px;
-            color: #5d4037;
-        }
-
-        .search-button p {
-            margin: 0;
-            font-size: 14px;
-            color: var(--text-sub);
-            line-height: 1.4;
-        }
-
-        /* --- 3. 選択用ページのスタイル（共通・個別） --- */
+        /* --- 3. 選択用ページのスタイル --- */
         .choice-grid { display: grid; gap: 20px; }
         .choice-grid.mood-style { grid-template-columns: repeat(2, 1fr); max-width: 800px; margin: 0 auto; }
-        
-        .choice-grid.triple-style {
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .choice-item {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 25px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
+        .choice-grid.triple-style { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); max-width: 900px; margin: 0 auto; }
+        .choice-item { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 25px; display: flex; align-items: center; gap: 20px; cursor: pointer; transition: all 0.2s; }
         .choice-item:hover { border-color: var(--primary-color); background-color: #fffdf9; transform: translateY(-2px); }
-        .choice-item .icon-box { width: 50px; height: 50px; background-color: #fbe9e7; color: #d84315; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
-
+        .choice-item .icon-box { width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
         .choice-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 40px 20px; text-align: center; cursor: pointer; transition: all 0.2s; }
         .choice-card:hover { border-color: var(--primary-color); background-color: #fffdf9; transform: translateY(-2px); }
         .choice-card i { font-size: 35px; color: var(--primary-color); margin-bottom: 15px; }
@@ -207,66 +101,47 @@
         .search-hint h4 { margin: 0 0 10px 0; color: #5d4037; }
         .search-hint p { margin: 0; font-size: 14px; color: var(--text-sub); line-height: 1.6; }
 
-        /* --- 4. 保存したボドゲ（空状態）用のスタイル --- */
-        .empty-state {
-            text-align: center;
-            padding: 80px 20px;
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        .empty-state i {
-            font-size: 60px;
-            color: #ccc;
-            margin-bottom: 20px;
-        }
+        /* --- 4. 検索結果・保存リスト用のカードスタイル --- */
+        .results-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; margin-top: 30px; }
+        .game-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; overflow: hidden; position: relative; transition: all 0.2s; display: flex; flex-direction: column; cursor: pointer; }
+        .game-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.05); }
+        
+        .game-img-wrapper { width: 100%; height: 200px; background: #f0e6d6; display: flex; align-items: center; justify-content: center; color: #bcaaa4; font-size: 50px; position: relative; overflow: hidden; }
+        .game-img-wrapper img { width: 100%; height: 100%; object-fit: cover; position: absolute; top:0; left:0; }
+        
+        .fav-btn { position: absolute; top: 15px; right: 15px; background: white; border: none; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.15); z-index: 10; font-size: 18px; color: #ccc; transition: color 0.2s; }
+        .fav-btn.active { color: #e57373; }
+        .game-info { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
+        .game-title { font-size: 18px; font-weight: bold; margin: 0 0 10px 0; color: #5d4037; }
+        .game-meta { font-size: 13px; color: var(--text-sub); margin-bottom: 10px; display: flex; gap: 15px; }
+        .game-desc { font-size: 14px; color: #666; line-height: 1.4; margin: 0; }
+
+        /* --- 5. 詳細ページ用のスタイル --- */
+        .detail-wrapper { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 40px; margin-top: 20px; }
+        @media (max-width: 768px) { .detail-wrapper { grid-template-columns: 1fr; } }
+        
+        .detail-img { background: #f0e6d6; height: 380px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 70px; color: #bcaaa4; overflow: hidden; position: relative; }
+        .detail-img img { width: 100%; height: 100%; object-fit: contain; position: absolute; top:0; left:0; padding: 10px; box-sizing: border-box; }
+        
+        .detail-content h2 { margin: 0 0 20px 0; font-size: 32px; color: #5d4037; display: flex; justify-content: space-between; align-items: center; gap: 15px; }
+        .detail-table { width: 100%; border-collapse: collapse; margin-bottom: 25px; }
+        .detail-table th, .detail-table td { padding: 12px; border-bottom: 1px solid #f0e6d6; text-align: left; }
+        .detail-table th { width: 30%; color: var(--text-sub); font-weight: 500; }
+        .btn-fav-large { background: #fff; border: 1px solid var(--border-color); padding: 10px 20px; border-radius: 20px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-weight: bold; font-size: 15px; color: var(--text-sub); flex-shrink: 0; }
+        .btn-fav-large.active { background: #ffe5ec; border-color: #ffb74d; color: #e57373; }
+
+        /* --- 6. 保存したボドゲ（空状態）用のスタイル --- */
+        .empty-state { text-align: center; padding: 80px 20px; background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; max-width: 600px; margin: 0 auto; }
+        .empty-state i { font-size: 60px; color: #ccc; margin-bottom: 20px; }
         .empty-state h3 { margin: 0 0 10px 0; color: #5d4037; }
         .empty-state p { color: var(--text-sub); margin-bottom: 30px; font-size: 14px; }
-        .btn-primary {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 25px;
-            font-size: 16px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background-color 0.2s;
-        }
+        .btn-primary { background-color: var(--primary-color); color: white; border: none; padding: 12px 30px; border-radius: 25px; font-size: 16px; cursor: pointer; font-weight: bold; transition: background-color 0.2s; }
         .btn-primary:hover { background-color: #5d4037; }
 
-        /* --- 5. 使い方ページ用のスタイル --- */
-        .guide-container {
-            max-width: 800px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            gap: 40px;
-        }
-        .guide-step {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 30px;
-            display: flex;
-            gap: 25px;
-            align-items: flex-start;
-        }
-        .step-num {
-            background-color: var(--primary-color);
-            color: white;
-            font-weight: bold;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            font-size: 18px;
-        }
+        /* --- 7. 使い方ページ用のスタイル --- */
+        .guide-container { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 40px; }
+        .guide-step { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 30px; display: flex; gap: 25px; align-items: flex-start; }
+        .step-num { background-color: var(--primary-color); color: white; font-weight: bold; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 18px; }
         .guide-content h3 { margin: 0 0 10px 0; color: #5d4037; font-size: 20px; }
         .guide-content p { margin: 0; color: var(--text-sub); font-size: 15px; line-height: 1.6; }
     </style>
@@ -302,7 +177,6 @@
                     <h3>気分から探す</h3>
                     <p>遊びたい気分に<br>ぴったりなゲームを探す</p>
                 </div>
-                <!-- 上品なチェリーブロッサムにアップデートされたボタン -->
                 <div class="search-button players" onclick="showPage('page-players')">
                     <i class="fa-solid fa-users"></i>
                     <h3>人数から探す</h3>
@@ -328,27 +202,27 @@
             <div class="section-desc">遊びたい気分に合ったボードゲームを探そう！</div>
 
             <div class="choice-grid mood-style">
-                <div class="choice-item" onclick="triggerSearch('わいわいしたい')">
+                <div class="choice-item" onclick="triggerSearch('mood', 'わいわいしたい')">
                     <div class="icon-box" style="background:#fbe9e7; color:#ff5722;"><i class="fa-solid fa-comments"></i></div>
                     <div><div class="choice-title">わいわいしたい</div><div class="choice-desc">みんなで盛り上がりたい！</div></div>
                 </div>
-                <div class="choice-item" onclick="triggerSearch('頭を使いたい')">
+                <div class="choice-item" onclick="triggerSearch('mood', '頭を使いたい')">
                     <div class="icon-box" style="background:#e8f5e9; color:#4caf50;"><i class="fa-solid fa-brain"></i></div>
                     <div><div class="choice-title">頭を使いたい</div><div class="choice-desc">じっくり考えるゲーム！</div></div>
                 </div>
-                <div class="choice-item" onclick="triggerSearch('協力したい')">
+                <div class="choice-item" onclick="triggerSearch('mood', '協力したい')">
                     <div class="icon-box" style="background:#e3f2fd; color:#2196f3;"><i class="fa-solid fa-handshake"></i></div>
                     <div><div class="choice-title">協力したい</div><div class="choice-desc">協力して目標を達成したい！</div></div>
                 </div>
-                <div class="choice-item" onclick="triggerSearch('駆け引きを楽しみたい')">
+                <div class="choice-item" onclick="triggerSearch('mood', '駆け引きを楽しみたい')">
                     <div class="icon-box" style="background:#fff3e0; color:#ff9800;"><i class="fa-solid fa-scale-balanced"></i></div>
                     <div><div class="choice-title">駆け引きを楽しみたい</div><div class="choice-desc">読み合い・心理戦が好き！</div></div>
                 </div>
-                <div class="choice-item" onclick="triggerSearch('初心者向け')">
+                <div class="choice-item" onclick="triggerSearch('mood', '初心者向け')">
                     <div class="icon-box" style="background:#f3e5f5; color:#9c27b0;"><i class="fa-solid fa-seedling"></i></div>
                     <div><div class="choice-title">初心者向け</div><div class="choice-desc">はじめてでも安心！</div></div>
                 </div>
-                <div class="choice-item" onclick="triggerSearch('運要素を楽しみたい')">
+                <div class="choice-item" onclick="triggerSearch('mood', '運要素を楽しみたい')">
                     <div class="icon-box" style="background:#fffde7; color:#fbc02d;"><i class="fa-solid fa-dice"></i></div>
                     <div><div class="choice-title">運要素を楽しみたい</div><div class="choice-desc">運がカギになるゲーム！</div></div>
                 </div>
@@ -362,14 +236,14 @@
             <div class="section-desc">一緒に遊ぶ人数を選んでね！</div>
 
             <div class="choice-grid triple-style">
-                <div class="choice-card" onclick="triggerSearch('1人')"><i class="fa-solid fa-user"></i><div class="choice-title">1人</div></div>
-                <div class="choice-card" onclick="triggerSearch('2人')"><i class="fa-solid fa-user-group"></i><div class="choice-title">2人</div></div>
-                <div class="choice-card" onclick="triggerSearch('3人')"><i class="fa-solid fa-users"></i><div class="choice-title">3人</div></div>
-                <div class="choice-card" onclick="triggerSearch('4人')"><i class="fa-solid fa-users"></i><div class="choice-title">4人</div></div>
-                <div class="choice-card" onclick="triggerSearch('5人')"><i class="fa-solid fa-users"></i><div class="choice-title">5人</div></div>
-                <div class="choice-card" onclick="triggerSearch('6人')"><i class="fa-solid fa-users"></i><div class="choice-title">6人</div></div>
+                <div class="choice-card" onclick="triggerSearch('players', 1)"><i class="fa-solid fa-user"></i><div class="choice-title">1人</div></div>
+                <div class="choice-card" onclick="triggerSearch('players', 2)"><i class="fa-solid fa-user-group"></i><div class="choice-title">2人</div></div>
+                <div class="choice-card" onclick="triggerSearch('players', 3)"><i class="fa-solid fa-users"></i><div class="choice-title">3人</div></div>
+                <div class="choice-card" onclick="triggerSearch('players', 4)"><i class="fa-solid fa-users"></i><div class="choice-title">4人</div></div>
+                <div class="choice-card" onclick="triggerSearch('players', 5)"><i class="fa-solid fa-users"></i><div class="choice-title">5人</div></div>
+                <div class="choice-card" onclick="triggerSearch('players', 6)"><i class="fa-solid fa-users"></i><div class="choice-title">6人</div></div>
             </div>
-            <div class="choice-card" style="max-width:900px; margin:20px auto 0; padding:20px;" onclick="triggerSearch('7人以上')">
+            <div class="choice-card" style="max-width:900px; margin:20px auto 0; padding:20px;" onclick="triggerSearch('players', 7)">
                 <div class="choice-title"><i class="fa-solid fa-users-rectangle" style="margin:0 10px 0 0; font-size:20px; vertical-align:middle;"></i>7人以上</div>
             </div>
         </div>
@@ -381,12 +255,12 @@
             <div class="section-desc">プレイ時間の目安を選んでね！</div>
 
             <div class="choice-grid triple-style">
-                <div class="choice-card" onclick="triggerSearch('15分以内')"><i class="fa-solid fa-circle-pie" style="color:#81c784;"></i><div class="choice-title">15分以内</div></div>
-                <div class="choice-card" onclick="triggerSearch('30分以内')"><i class="fa-solid fa-circle-pie" style="color:#ffb74d;"></i><div class="choice-title">30分以内</div></div>
-                <div class="choice-card" onclick="triggerSearch('60分以内')"><i class="fa-solid fa-circle-pie" style="color:#e57373;"></i><div class="choice-title">60分以内</div></div>
-                <div class="choice-card" onclick="triggerSearch('90分以内')"><i class="fa-solid fa-circle-pie" style="color:#ba68c8;"></i><div class="choice-title">90分以内</div></div>
-                <div class="choice-card" onclick="triggerSearch('120分以内')"><i class="fa-solid fa-circle-pie" style="color:#4db6ac;"></i><div class="choice-title">120分以内</div></div>
-                <div class="choice-card" onclick="triggerSearch('120分以上')"><i class="fa-solid fa-circle-pie" style="color:#90a4ae;"></i><div class="choice-title">120分以上</div></div>
+                <div class="choice-card" onclick="triggerSearch('time', 15)"><i class="fa-solid fa-circle-pie" style="color:#81c784;"></i><div class="choice-title">15分以内</div></div>
+                <div class="choice-card" onclick="triggerSearch('time', 30)"><i class="fa-solid fa-circle-pie" style="color:#ffb74d;"></i><div class="choice-title">30分以内</div></div>
+                <div class="choice-card" onclick="triggerSearch('time', 60)"><i class="fa-solid fa-circle-pie" style="color:#e57373;"></i><div class="choice-title">60分以内</div></div>
+                <div class="choice-card" onclick="triggerSearch('time', 90)"><i class="fa-solid fa-circle-pie" style="color:#ba68c8;"></i><div class="choice-title">90分以内</div></div>
+                <div class="choice-card" onclick="triggerSearch('time', 120)"><i class="fa-solid fa-circle-pie" style="color:#4db6ac;"></i><div class="choice-title">120分以内</div></div>
+                <div class="choice-card" onclick="triggerSearch('time', 121)"><i class="fa-solid fa-circle-pie" style="color:#90a4ae;"></i><div class="choice-title">120分以上</div></div>
             </div>
         </div>
 
@@ -399,7 +273,7 @@
             <div class="search-bar-container">
                 <div class="search-input-wrapper">
                     <input type="text" placeholder="例）カタン" id="nameInput">
-                    <i class="fa-solid fa-magnifying-glass" onclick="triggerSearch(document.getElementById('nameInput').value || '入力ワード')"></i>
+                    <i class="fa-solid fa-magnifying-glass" onclick="triggerSearch('name', document.getElementById('nameInput').value)"></i>
                 </div>
                 <div class="search-hint">
                     <h4>検索のコツ</h4>
@@ -408,13 +282,30 @@
             </div>
         </div>
 
-        <!-- ================= ⑥ 保存したボドゲページ（空状態） ================= -->
+        <!-- ================= ⑤ 検索結果一覧ページ ================= -->
+        <div id="page-results" class="page">
+            <div class="breadcrumb" id="results-breadcrumb">ホーム ＞ 検索結果</div>
+            <div class="section-title" id="results-title">検索結果</div>
+            <div class="section-desc" id="results-desc">条件に合うゲームが見つかりました！</div>
+            <div class="results-grid" id="results-list"></div>
+        </div>
+
+        <!-- ================= ⑥ 詳細ページ ================= -->
+        <div id="page-detail" class="page">
+            <div class="breadcrumb" id="detail-breadcrumb">ホーム ＞ 検索結果 ＞ 詳細</div>
+            <div class="detail-wrapper" id="detail-container"></div>
+        </div>
+
+        <!-- ================= ⑦ 保存したボドゲページ ================= -->
         <div id="page-favorites" class="page">
             <div class="breadcrumb">ホーム ＞ 保存したボドゲ</div>
             <div class="section-title">保存したボドゲ</div>
             <div class="section-desc">お気に入りに保存したゲームをここで確認・管理できます。</div>
 
-            <div class="empty-state">
+            <div class="results-grid" id="favorites-list"></div>
+
+            <!-- 空状態の表示 -->
+            <div class="empty-state" id="favorites-empty">
                 <i class="fa-regular fa-heart"></i>
                 <h3>保存されたボードゲームはありません</h3>
                 <p>気になったゲームの詳細ページや一覧ページでハートマークを押すと、ここにストックされていつでも見返せるようになります。</p>
@@ -436,28 +327,25 @@
                         <p>「今日はわいわい盛り上がりたい」「じっくり頭を使って深く遊びたい」「みんなで協力してクリアしたい」など、その日の参加者のテンションや感情の波長に合わせて最適なゲームを絞り込めます。</p>
                     </div>
                 </div>
-
                 <div class="guide-step">
                     <div class="step-num">2</div>
                     <div class="guide-content">
                         <h3>人数から探す</h3>
-                        <p>2人きりの真剣勝負から、3〜4人の定番集まり、5〜6人以上の大人数パーティーまで、実際にその場で遊ぶ「正確な人数」を指定して、全員が余すことなく楽しめるゲームだけを瞬時にリストアップします。</p>
+                        <p>2人きりの真剣勝負から、3〜4人の定番集まり、5〜6人以上の大人数パーティーまで指定してリストアップします。</p>
                     </div>
                 </div>
-
                 <div class="guide-step">
                     <div class="step-num">3</div>
                     <div class="guide-content">
                         <h3>時間から探す</h3>
-                        <p>スキマ時間にサクッと遊べる「15分以内」の軽いゲーム、ちょっとした合間に最適な「30分以内 Upside」、核心に迫る「60分」のゲームまで、持っている時間枠に合わせて探せます。</p>
+                        <p>スキマ時間にサクッと遊べる軽いゲームからじっくりゲームまで、持っている時間枠に合わせて探せます。</p>
                     </div>
                 </div>
-
                 <div class="guide-step">
                     <div class="step-num">4</div>
                     <div class="guide-content">
                         <h3>名前から探す</h3>
-                        <p>「あの有名なカタンってどんなゲームだろう？」「友達が言っていたワードウルフを調べたい」など、特定の遊びたいゲームが決まっている場合は、名前の一部を打ち込むだけで部分一致による高速検索が可能です。</p>
+                        <p>特定の遊びたいゲームが決まっている場合は、名前の一部を打ち込むだけで部分一致による高速検索が可能です。</p>
                     </div>
                 </div>
             </div>
@@ -467,6 +355,57 @@
 
     <!-- --- JavaScript --- -->
     <script>
+        // --- 1. ボードゲームのマスターデータ ---
+        // ★ images/ファイル名 となるようにパスを書き換えました！
+        const gamesData = [
+            {
+                id: "catan",
+                name: "カタン",
+                images: ["images/catan.jpg", "images/catan.png", "images/catan.jpeg", "images/catan.PNG", "images/catan.JPG"],
+                minPlayers: 3,
+                maxPlayers: 4,
+                time: 60,
+                moods: ["頭を使いたい", "駆け引きを楽しみたい"],
+                desc: "資源を集めて開拓地や都市を建設し、勝利点10点を目指す開拓と交渉のゲーム。交渉と戦略が勝利の鍵！",
+                difficulty: "★★★☆☆",
+                genre: "戦略 / 交渉",
+                designer: "クラウス・トイバー",
+                year: "1995年"
+            },
+            {
+                id: "ito",
+                name: "ito (イト)",
+                images: ["images/ito.jpg", "images/ito.png", "images/ito.jpeg", "images/ito.PNG", "images/ito.JPG"],
+                minPlayers: 2,
+                maxPlayers: 10,
+                time: 30,
+                moods: ["わいわいしたい", "協力したい", "初心者向け"],
+                desc: "自分の数字を言葉の「例え」で表現し、みんなで数字の小さい順にカードを出していく、伝わりそうで伝わらない協力パーティーゲーム！",
+                difficulty: "★☆☆☆☆",
+                genre: "協力 / パーティー",
+                designer: "326 (ナカムラミツル)",
+                year: "2019年"
+            },
+            {
+                id: "nanjamonja",
+                name: "ナンジャモンジャ",
+                images: ["images/nanjamonja.jpg", "images/nanjamonja.png", "images/nanjamonja.jpeg", "images/nanjamonja.PNG", "images/nanjamonja.JPG"],
+                minPlayers: 2,
+                maxPlayers: 6,
+                time: 15,
+                moods: ["わいわいしたい", "初心者向け", "運要素を楽しみたい"],
+                desc: "謎の生物にその場で名前をつけ、次にそいつが出たら名前を叫ぶ！爆笑必至の記憶とスピードのゲームです。",
+                difficulty: "★☆☆☆☆",
+                genre: "記憶 / パーティー",
+                designer: "リーベディバ・アリョーナ",
+                year: "2016年"
+            }
+        ];
+
+        // お気に入りIDを保存する配列（ローカルストレージから読み込む）
+        let favorites = JSON.parse(localStorage.getItem('bg_favorites')) || [];
+
+        // --- 2. ページ切り替え処理 ---
         function showPage(pageId) {
             const pages = document.querySelectorAll('.page');
             pages.forEach(page => page.classList.remove('active'));
@@ -476,11 +415,196 @@
                 targetPage.classList.add('active');
                 window.scrollTo(0, 0);
             }
+
+            if (pageId === 'page-favorites') {
+                renderFavorites();
+            }
         }
 
-        function triggerSearch(criterion) {
-            alert(`「${criterion}」が選択されました！\n条件に合う検索結果ページ一覧への遷移フローは、今後の実装ステップ（Assemble）で構築します。`);
+        // --- 3. 検索ロジック ---
+        function triggerSearch(type, value) {
+            let filteredGames = [];
+            let titleText = "検索結果";
+
+            if (type === 'mood') {
+                filteredGames = gamesData.filter(g => g.moods.includes(value));
+                titleText = `「${value}」の検索結果`;
+            } else if (type === 'players') {
+                const num = parseInt(value);
+                if (num === 7) {
+                    filteredGames = gamesData.filter(g => g.maxPlayers >= 7);
+                    titleText = `「7人以上」の検索結果`;
+                } else {
+                    filteredGames = gamesData.filter(g => num >= g.minPlayers && num <= g.maxPlayers);
+                    titleText = `「${num}人」の検索結果`;
+                }
+            } else if (type === 'time') {
+                const t = parseInt(value);
+                if (t === 15) { filteredGames = gamesData.filter(g => g.time <= 15); titleText = "「15分以内」の検索結果"; }
+                else if (t === 30) { filteredGames = gamesData.filter(g => g.time <= 30); titleText = "「30分以内」の検索結果"; }
+                else if (t === 60) { filteredGames = gamesData.filter(g => g.time <= 60); titleText = "「60分以内」の検索結果"; }
+                else if (t === 90) { filteredGames = gamesData.filter(g => g.time <= 90); titleText = "「90分以内」の検索結果"; }
+                else if (t === 120) { filteredGames = gamesData.filter(g => g.time <= 120); titleText = "「120分以内」の検索結果"; }
+                else { filteredGames = gamesData.filter(g => g.time > 120); titleText = "「120分以上」の検索結果"; }
+            } else if (type === 'name') {
+                if (!value || value.trim() === "") {
+                    alert("ゲーム名を入力してください！");
+                    return;
+                }
+                filteredGames = gamesData.filter(g => g.name.toLowerCase().includes(value.toLowerCase()));
+                titleText = `「${value}」の検索結果`;
+            }
+
+            document.getElementById('results-title').innerText = titleText;
+            document.getElementById('results-desc').innerText = `${filteredGames.length} 件見つかりました`;
+            
+            const resultsList = document.getElementById('results-list');
+            resultsList.innerHTML = "";
+
+            if (filteredGames.length === 0) {
+                resultsList.innerHTML = "<p style='grid-column:1/-1; text-align:center; color:var(--text-sub);'>条件に合うゲームがまだ登録されていません。</p>";
+            } else {
+                filteredGames.forEach(game => {
+                    resultsList.appendChild(createGameCard(game));
+                });
+            }
+
+            showPage('page-results');
         }
+
+        // 画像読み込みエラー時に他の拡張子を試すフォールバック関数
+        function handleImgError(imgElement, imgArray, currentIndex) {
+            const nextIndex = currentIndex + 1;
+            if (nextIndex < imgArray.length) {
+                imgElement.src = imgArray[nextIndex];
+                imgElement.onerror = () => handleImgError(imgElement, imgArray, nextIndex);
+            } else {
+                imgElement.style.display = 'none';
+            }
+        }
+
+        // --- 4. HTMLカード要素の生成 ---
+        function createGameCard(game) {
+            const card = document.createElement('div');
+            card.className = 'game-card';
+            card.onclick = () => showDetail(game.id);
+
+            const isFav = favorites.includes(game.id);
+
+            card.innerHTML = `
+                <div class="game-img-wrapper">
+                    <i class="fa-solid fa-dice-d6"></i>
+                    <img src="${game.images[0]}" alt="${game.name}" onerror="handleImgError(this, ${JSON.stringify(game.images)}, 0)">
+                    
+                    <button class="fav-btn ${isFav ? 'active' : ''}" onclick="toggleFavorite(event, '${game.id}')">
+                        <i class="${isFav ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
+                    </button>
+                </div>
+                <div class="game-info">
+                    <h3 class="game-title">${game.name}</h3>
+                    <div class="game-meta">
+                        <span><i class="fa-solid fa-users"></i> ${game.minPlayers}〜${game.maxPlayers}人</span>
+                        <span><i class="fa-regular fa-clock"></i> ${game.time}分</span>
+                    </div>
+                    <p class="game-desc">${game.desc}</p>
+                </div>
+            `;
+            return card;
+        }
+
+        // --- 5. 詳細ページの表示 ---
+        function showDetail(gameId) {
+            const game = gamesData.find(g => g.id === gameId);
+            if (!game) return;
+
+            const container = document.getElementById('detail-container');
+            const isFav = favorites.includes(game.id);
+
+            container.innerHTML = `
+                <div class="detail-img">
+                    <i class="fa-solid fa-dice-d6"></i>
+                    <img src="${game.images[0]}" alt="${game.name}" onerror="handleImgError(this, ${JSON.stringify(game.images)}, 0)">
+                </div>
+                <div class="detail-content">
+                    <h2>
+                        ${game.name}
+                        <button class="btn-fav-large ${isFav ? 'active' : ''}" onclick="toggleFavorite(event, '${game.id}', true)">
+                            <i class="${isFav ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
+                            <span>${isFav ? '保存済み' : '保存する'}</span>
+                        </button>
+                    </h2>
+                    <table class="detail-table">
+                        <tr><th>人数</th><td>${game.minPlayers} 〜 ${game.maxPlayers}人</td></tr>
+                        <tr><th>プレイ時間</th><td>${game.time} 分</td></tr>
+                        <tr><th>難易度</th><td>${game.difficulty}</td></tr>
+                        <tr><th>ジャンル</th><td>${game.genre}</td></tr>
+                        <tr><th>デザイナー</th><td>${game.designer}</td></tr>
+                        <tr><th>発売年</th><td>${game.year}</td></tr>
+                    </table>
+                    <p style="line-height:1.6; color:#444;">${game.desc}</p>
+                </div>
+            `;
+            showPage('page-detail');
+        }
+
+        // --- 6. お気に入り登録・解除の処理 ---
+        function toggleFavorite(event, gameId, isLargeBtn = false) {
+            event.stopPropagation();
+            
+            const index = favorites.indexOf(gameId);
+            if (index > -1) {
+                favorites.splice(index, 1);
+            } else {
+                favorites.push(gameId);
+            }
+
+            localStorage.setItem('bg_favorites', JSON.stringify(favorites));
+
+            if (isLargeBtn) {
+                showDetail(gameId);
+            } else {
+                const activePage = document.querySelector('.page.active').id;
+                if (activePage === 'page-results') {
+                    const btn = event.currentTarget;
+                    const icon = btn.querySelector('i');
+                    if (favorites.includes(gameId)) {
+                        btn.classList.add('active');
+                        icon.className = 'fa-solid fa-heart';
+                    } else {
+                        btn.classList.remove('active');
+                        icon.className = 'fa-regular fa-heart';
+                    }
+                } else if (activePage === 'page-favorites') {
+                    renderFavorites();
+                }
+            }
+        }
+
+        // --- 7. 保存したボドゲ一覧の描画 ---
+        function renderFavorites() {
+            const list = document.getElementById('favorites-list');
+            const emptyState = document.getElementById('favorites-empty');
+            
+            list.innerHTML = "";
+
+            if (favorites.length === 0) {
+                list.style.display = 'none';
+                emptyState.style.display = 'block';
+            } else {
+                list.style.display = 'grid';
+                emptyState.style.display = 'none';
+
+                favorites.forEach(gameId => {
+                    const game = gamesData.find(g => g.id === gameId);
+                    if (game) {
+                        list.appendChild(createGameCard(game));
+                    }
+                });
+            }
+        }
+
+        renderFavorites();
     </script>
 </body>
 </html>
+
