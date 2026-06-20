@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ボドゲさがし</title>
-    <!-- アイコンフォント FontAwesome の読み込み -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         /* --- 1. 全体共通のデザイン --- */
@@ -64,7 +63,12 @@
         .container { max-width: 1200px; margin: 0 auto; padding: 60px 20px; }
         .page { display: none; }
         .page.active { display: block; }
+        
+        /* パンくずリストのスタイル修正（リンクらしく見せる） */
         .breadcrumb { font-size: 14px; color: var(--text-sub); margin-bottom: 20px; }
+        .breadcrumb a { color: var(--text-sub); text-decoration: none; transition: color 0.2s; }
+        .breadcrumb a:hover { color: var(--primary-color); text-decoration: underline; }
+        
         .section-title { text-align: center; font-size: 32px; color: #5d4037; margin-bottom: 10px; font-weight: 700; }
         .section-desc { text-align: center; font-size: 16px; color: var(--text-sub); margin-bottom: 50px; }
 
@@ -130,7 +134,7 @@
         .btn-fav-large { background: #fff; border: 1px solid var(--border-color); padding: 10px 20px; border-radius: 20px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-weight: bold; font-size: 15px; color: var(--text-sub); flex-shrink: 0; }
         .btn-fav-large.active { background: #ffe5ec; border-color: #ffb74d; color: #e57373; }
 
-        /* --- 6. 保存したボドゲ（空状態）用のスタイル --- */
+        /* --- 6. 保存したボドゲ・空状態用のスタイル --- */
         .empty-state { text-align: center; padding: 80px 20px; background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; max-width: 600px; margin: 0 auto; }
         .empty-state i { font-size: 60px; color: #ccc; margin-bottom: 20px; }
         .empty-state h3 { margin: 0 0 10px 0; color: #5d4037; }
@@ -148,7 +152,6 @@
 </head>
 <body>
 
-    <!-- 共通ヘッダー -->
     <header>
         <a href="#" class="logo-link" onclick="showPage('home')">
             <div class="logo">
@@ -166,7 +169,6 @@
 
     <div class="container">
         
-        <!-- ================= ① ホーム（トップページ） ================= -->
         <div id="home" class="page active">
             <div class="section-title" style="font-size: 38px; margin-top: 20px;">自分にピッタリのボードゲームを見つけよう</div>
             <div class="section-desc">いろんな探し方で、あなたに合うゲームがきっと見つかる！</div>
@@ -195,11 +197,10 @@
             </div>
         </div>
 
-        <!-- ================= ② 気分からさがすページ ================= -->
         <div id="page-mood" class="page">
-            <div class="breadcrumb">ホーム ＞ 気分から探す</div>
+            <div class="breadcrumb"><a href="#" onclick="showPage('home')">ホーム</a> ＞ 気分から探す</div>
             <div class="section-title">今日はどんな気分？</div>
-            <div class="section-desc">遊びたい気分に合ったボードゲームを探そう！</div>
+            <div class="section-desc">遊びたい気分に合ったボードゲームを探しよう！</div>
 
             <div class="choice-grid mood-style">
                 <div class="choice-item" onclick="triggerSearch('mood', 'わいわいしたい')">
@@ -229,9 +230,8 @@
             </div>
         </div>
 
-        <!-- ================= ③ 人数からさがすページ ================= -->
         <div id="page-players" class="page">
-            <div class="breadcrumb">ホーム ＞ 人数から探す</div>
+            <div class="breadcrumb"><a href="#" onclick="showPage('home')">ホーム</a> ＞ 人数から探す</div>
             <div class="section-title">何人で遊ぶ？</div>
             <div class="section-desc">一緒に遊ぶ人数を選んでね！</div>
 
@@ -248,9 +248,8 @@
             </div>
         </div>
 
-        <!-- ================= ④ 時間からさがすページ ================= -->
         <div id="page-time" class="page">
-            <div class="breadcrumb">ホーム ＞ 時間から探す</div>
+            <div class="breadcrumb"><a href="#" onclick="showPage('home')">ホーム</a> ＞ 時間から探す</div>
             <div class="section-title">どれくらい遊びたい？</div>
             <div class="section-desc">プレイ時間の目安を選んでね！</div>
 
@@ -264,47 +263,42 @@
             </div>
         </div>
 
-        <!-- ================= ⑤ 名前からさがすページ ================= -->
         <div id="page-name" class="page">
-            <div class="breadcrumb">ホーム ＞ 名前から探す</div>
+            <div class="breadcrumb"><a href="#" onclick="showPage('home')">ホーム</a> ＞ 名前から探す</div>
             <div class="section-title">ゲーム名を入力して検索</div>
             <div class="section-desc">遊びたいゲームの名前を入力してね！</div>
 
             <div class="search-bar-container">
                 <div class="search-input-wrapper">
-                    <input type="text" placeholder="例）カタン" id="nameInput">
+                    <input type="text" placeholder="例）カタン" id="nameInput" onkeypress="if(event.key === 'Enter') triggerSearch('name', this.value)">
                     <i class="fa-solid fa-magnifying-glass" onclick="triggerSearch('name', document.getElementById('nameInput').value)"></i>
                 </div>
                 <div class="search-hint">
                     <h4>検索のコツ</h4>
-                    <p>ひらがな・カタカナ・漢字で入力できます。<br>一部だけの入力でも検索できます。</p>
+                    <p>ひらがなで入力しても、カタカナのゲームがしっかりヒットします！<br>一部だけの入力でも検索できます。</p>
                 </div>
             </div>
         </div>
 
-        <!-- ================= ⑤ 検索結果一覧ページ ================= -->
         <div id="page-results" class="page">
-            <div class="breadcrumb" id="results-breadcrumb">ホーム ＞ 検索結果</div>
+            <div class="breadcrumb" id="results-breadcrumb"><a href="#" onclick="showPage('home')">ホーム</a> ＞ 検索結果</div>
             <div class="section-title" id="results-title">検索結果</div>
             <div class="section-desc" id="results-desc">条件に合うゲームが見つかりました！</div>
             <div class="results-grid" id="results-list"></div>
         </div>
 
-        <!-- ================= ⑥ 詳細ページ ================= -->
         <div id="page-detail" class="page">
-            <div class="breadcrumb" id="detail-breadcrumb">ホーム ＞ 検索結果 ＞ 詳細</div>
+            <div class="breadcrumb" id="detail-breadcrumb"><a href="#" onclick="showPage('home')">ホーム</a> ＞ <a href="#" onclick="backToLastSearch()">検索結果</a> ＞ 詳細</div>
             <div class="detail-wrapper" id="detail-container"></div>
         </div>
 
-        <!-- ================= ⑦ 保存したボドゲページ ================= -->
         <div id="page-favorites" class="page">
-            <div class="breadcrumb">ホーム ＞ 保存したボドゲ</div>
+            <div class="breadcrumb"><a href="#" onclick="showPage('home')">ホーム</a> ＞ 保存したボドゲ</div>
             <div class="section-title">保存したボドゲ</div>
             <div class="section-desc">お気に入りに保存したゲームをここで確認・管理できます。</div>
 
             <div class="results-grid" id="favorites-list"></div>
 
-            <!-- 空状態の表示 -->
             <div class="empty-state" id="favorites-empty">
                 <i class="fa-regular fa-heart"></i>
                 <h3>保存されたボードゲームはありません</h3>
@@ -313,9 +307,8 @@
             </div>
         </div>
 
-        <!-- ================= ⑦ 使い方ページ ================= -->
         <div id="page-guide" class="page">
-            <div class="breadcrumb">ホーム ＞ 使い方</div>
+            <div class="breadcrumb"><a href="#" onclick="showPage('home')">ホーム</a> ＞ 使い方</div>
             <div class="section-title">サイトの使い方</div>
             <div class="section-desc">「ボドゲさがし」では、あなたのシチュエーションに合わせた4つの直感的な探し方を提供しています。</div>
 
@@ -353,10 +346,8 @@
 
     </div>
 
-    <!-- --- JavaScript --- -->
     <script>
         // --- 1. ボードゲームのマスターデータ ---
-        // ★ images/ファイル名 となるようにパスを書き換えました！
         const gamesData = [
             {
                 id: "catan",
@@ -402,8 +393,11 @@
             }
         ];
 
-        // お気に入りIDを保存する配列（ローカルストレージから読み込む）
+        // お気に入りIDを保存する配列
         let favorites = JSON.parse(localStorage.getItem('bg_favorites')) || [];
+
+        // ★追加：最後に実行した検索の条件を記憶するオブジェクト
+        let lastSearch = { type: null, value: null };
 
         // --- 2. ページ切り替え処理 ---
         function showPage(pageId) {
@@ -421,8 +415,26 @@
             }
         }
 
+        // ひらがな・カタカナを相互に変換する関数
+        function kanaToKata(str) {
+            return str.replace(/[\u3041-\u3096]/g, function(match) {
+                const chr = match.charCodeAt(0) + 0x60;
+                return String.fromCharCode(chr);
+            });
+        }
+        function kataToKana(str) {
+            return str.replace(/[\u30a1-\u30f6]/g, function(match) {
+                const chr = match.charCodeAt(0) - 0x60;
+                return String.fromCharCode(chr);
+            });
+        }
+
         // --- 3. 検索ロジック ---
         function triggerSearch(type, value) {
+            // ★検索が実行されたら、その条件を記憶しておく
+            lastSearch.type = type;
+            lastSearch.value = value;
+
             let filteredGames = [];
             let titleText = "検索結果";
 
@@ -444,14 +456,22 @@
                 else if (t === 30) { filteredGames = gamesData.filter(g => g.time <= 30); titleText = "「30分以内」の検索結果"; }
                 else if (t === 60) { filteredGames = gamesData.filter(g => g.time <= 60); titleText = "「60分以内」の検索結果"; }
                 else if (t === 90) { filteredGames = gamesData.filter(g => g.time <= 90); titleText = "「90分以内」の検索結果"; }
-                else if (t === 120) { filteredGames = gamesData.filter(g => g.time <= 120); titleText = "「120分以内」の検索結果"; }
+                else if (t === 120) { filteredGames = gamesData.filter(g => g.time <= 120); titleText = "保存したボドゲ「120分以内」の検索結果"; }
                 else { filteredGames = gamesData.filter(g => g.time > 120); titleText = "「120分以上」の検索結果"; }
             } else if (type === 'name') {
                 if (!value || value.trim() === "") {
                     alert("ゲーム名を入力してください！");
                     return;
                 }
-                filteredGames = gamesData.filter(g => g.name.toLowerCase().includes(value.toLowerCase()));
+                
+                const lowerVal = value.toLowerCase().trim();
+                const kataVal = kanaToKata(lowerVal);
+                const kanaVal = kataToKana(lowerVal);
+
+                filteredGames = gamesData.filter(g => {
+                    const gameName = g.name.toLowerCase();
+                    return gameName.includes(lowerVal) || gameName.includes(kataVal) || gameName.includes(kanaVal);
+                });
                 titleText = `「${value}」の検索結果`;
             }
 
@@ -462,7 +482,13 @@
             resultsList.innerHTML = "";
 
             if (filteredGames.length === 0) {
-                resultsList.innerHTML = "<p style='grid-column:1/-1; text-align:center; color:var(--text-sub);'>条件に合うゲームがまだ登録されていません。</p>";
+                // ★改善：0件だった場合にホームへ戻るボタンを表示するようブラッシュアップ
+                resultsList.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 40px var(--text-sub);">
+                        <p style="color: var(--text-sub); margin-bottom: 20px;">条件に合うゲームがまだ登録されていません。</p>
+                        <button class="btn-primary" onclick="showPage('home')">ホームに戻る</button>
+                    </div>
+                `;
             } else {
                 filteredGames.forEach(game => {
                     resultsList.appendChild(createGameCard(game));
@@ -470,6 +496,17 @@
             }
 
             showPage('page-results');
+        }
+
+        // ★追加：詳細ページから直前の検索結果リストに戻るための関数
+        function backToLastSearch() {
+            if (lastSearch.type) {
+                // 記憶していた条件でもう一度検索を呼び出す
+                triggerSearch(lastSearch.type, lastSearch.value);
+            } else {
+                // 万が一記憶がない場合はホームに戻す
+                showPage('home');
+            }
         }
 
         // 画像読み込みエラー時に他の拡張子を試すフォールバック関数
@@ -607,4 +644,3 @@
     </script>
 </body>
 </html>
-
