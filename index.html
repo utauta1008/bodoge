@@ -32,13 +32,13 @@
             padding: 0;
         }
 
-        /* ヘッダーのレイアウト：右上に配置 */
+        /* ヘッダーのレイアウト：ロゴが大きくなったのでpaddingを調整 */
         header {
             background-color: var(--card-bg);
             border-bottom: 1px solid var(--border-color);
-            padding: 15px 40px;
+            padding: 10px 40px; /* 上下の余白を少し詰めて全体のバランスを調整 */
             display: flex;
-            justify-content: space-between; /* ロゴとメニューを両端に離す */
+            justify-content: space-between; 
             align-items: center;
             position: sticky;
             top: 0;
@@ -46,16 +46,23 @@
         }
 
         .logo-link { text-decoration: none; color: var(--text-color); }
-        .logo { font-size: 22px; font-weight: bold; display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        .logo { 
+            font-size: 26px; /* ロゴ画像に合わせて文字サイズも一回り大きく */
+            font-weight: bold; 
+            display: flex; 
+            align-items: center; 
+            gap: 14px; /* ロゴと文字の間隔を少し広げてゆったりと */
+            cursor: pointer; 
+        }
 
-        /* ロゴ画像の追加スタイル */
+        /* ロゴ画像を二回り大きく変更 */
         .logo-img {
-            height: 32px; /* 文字の大きさに合わせた高さ */
-            width: auto;  /* 比率を保って自動調整 */
+            height: 54px; /* 32pxから54pxへ二回り大きく変更 */
+            width: auto;  
             vertical-align: middle;
         }
 
-        /* ナビゲーションを右上に配置 */
+        /* ナビゲーション */
         nav { 
             display: flex; 
             gap: 30px; 
@@ -400,10 +407,7 @@
             }
         ];
 
-        // お気に入りIDを保存する配列
         let favorites = JSON.parse(localStorage.getItem('bg_favorites')) || [];
-
-        // 最後に実行した検索の条件を記憶するオブジェクト
         let lastSearch = { type: null, value: null };
 
         // --- 2. ページ切り替え処理 ---
@@ -422,7 +426,6 @@
             }
         }
 
-        // ひらがな・カタカナを相互に変換する関数
         function kanaToKata(str) {
             return str.replace(/[\u3041-\u3096]/g, function(match) {
                 const chr = match.charCodeAt(0) + 0x60;
@@ -438,7 +441,6 @@
 
         // --- 3. 検索ロジック ---
         function triggerSearch(type, value) {
-            // 検索が実行されたら、その条件を記憶しておく
             lastSearch.type = type;
             lastSearch.value = value;
 
@@ -504,7 +506,6 @@
             showPage('page-results');
         }
 
-        // 詳細ページから直前の検索結果リストに戻るための関数
         function backToLastSearch() {
             if (lastSearch.type) {
                 triggerSearch(lastSearch.type, lastSearch.value);
@@ -513,7 +514,6 @@
             }
         }
 
-        // 画像読み込みエラー時に他の拡張子を試すフォールバック関数
         function handleImgError(imgElement, imgArray, currentIndex) {
             const nextIndex = currentIndex + 1;
             if (nextIndex < imgArray.length) {
