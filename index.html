@@ -48,6 +48,13 @@
         .logo-link { text-decoration: none; color: var(--text-color); }
         .logo { font-size: 22px; font-weight: bold; display: flex; align-items: center; gap: 10px; cursor: pointer; }
 
+        /* ロゴ画像の追加スタイル */
+        .logo-img {
+            height: 32px; /* 文字の大きさに合わせた高さ */
+            width: auto;  /* 比率を保って自動調整 */
+            vertical-align: middle;
+        }
+
         /* ナビゲーションを右上に配置 */
         nav { 
             display: flex; 
@@ -64,7 +71,6 @@
         .page { display: none; }
         .page.active { display: block; }
         
-        /* パンくずリストのスタイル修正（リンクらしく見せる） */
         .breadcrumb { font-size: 14px; color: var(--text-sub); margin-bottom: 20px; }
         .breadcrumb a { color: var(--text-sub); text-decoration: none; transition: color 0.2s; }
         .breadcrumb a:hover { color: var(--primary-color); text-decoration: underline; }
@@ -155,7 +161,8 @@
     <header>
         <a href="#" class="logo-link" onclick="showPage('home')">
             <div class="logo">
-                <i class="fa-solid fa-dice"></i> ボドゲさがし
+                <img src="logo.png" alt="ボドゲさがし ロゴ" class="logo-img">
+                ボドゲさがし
             </div>
         </a>
 
@@ -396,7 +403,7 @@
         // お気に入りIDを保存する配列
         let favorites = JSON.parse(localStorage.getItem('bg_favorites')) || [];
 
-        // ★追加：最後に実行した検索の条件を記憶するオブジェクト
+        // 最後に実行した検索の条件を記憶するオブジェクト
         let lastSearch = { type: null, value: null };
 
         // --- 2. ページ切り替え処理 ---
@@ -431,7 +438,7 @@
 
         // --- 3. 検索ロジック ---
         function triggerSearch(type, value) {
-            // ★検索が実行されたら、その条件を記憶しておく
+            // 検索が実行されたら、その条件を記憶しておく
             lastSearch.type = type;
             lastSearch.value = value;
 
@@ -456,7 +463,7 @@
                 else if (t === 30) { filteredGames = gamesData.filter(g => g.time <= 30); titleText = "「30分以内」の検索結果"; }
                 else if (t === 60) { filteredGames = gamesData.filter(g => g.time <= 60); titleText = "「60分以内」の検索結果"; }
                 else if (t === 90) { filteredGames = gamesData.filter(g => g.time <= 90); titleText = "「90分以内」の検索結果"; }
-                else if (t === 120) { filteredGames = gamesData.filter(g => g.time <= 120); titleText = "保存したボドゲ「120分以内」の検索結果"; }
+                else if (t === 120) { filteredGames = gamesData.filter(g => g.time <= 120); titleText = "「120分以内」の検索結果"; }
                 else { filteredGames = gamesData.filter(g => g.time > 120); titleText = "「120分以上」の検索結果"; }
             } else if (type === 'name') {
                 if (!value || value.trim() === "") {
@@ -482,7 +489,6 @@
             resultsList.innerHTML = "";
 
             if (filteredGames.length === 0) {
-                // ★改善：0件だった場合にホームへ戻るボタンを表示するようブラッシュアップ
                 resultsList.innerHTML = `
                     <div style="grid-column: 1 / -1; text-align: center; padding: 40px var(--text-sub);">
                         <p style="color: var(--text-sub); margin-bottom: 20px;">条件に合うゲームがまだ登録されていません。</p>
@@ -498,13 +504,11 @@
             showPage('page-results');
         }
 
-        // ★追加：詳細ページから直前の検索結果リストに戻るための関数
+        // 詳細ページから直前の検索結果リストに戻るための関数
         function backToLastSearch() {
             if (lastSearch.type) {
-                // 記憶していた条件でもう一度検索を呼び出す
                 triggerSearch(lastSearch.type, lastSearch.value);
             } else {
-                // 万が一記憶がない場合はホームに戻す
                 showPage('home');
             }
         }
